@@ -34,6 +34,14 @@ module Agents
       *  [Order Coupons](https://developer.bigcommerce.com/api-reference/store-management/orders/order-coupons/getallordercoupons#responses)
       *  [Transactions](https://developer.bigcommerce.com/api-reference/store-management/order-transactions/transactions/gettransactions#responses)
 
+      ### **Options:**
+      *  store_hash   - required
+      *  client_id    - required
+      *  access_token - required
+      *  order_id     - required
+      *  output_mode  - not required ('clean' or 'merge', defaults to 'clean')
+
+
       ### **Agent Payloads:**
 
       **Success Payload:**
@@ -75,6 +83,7 @@ module Agents
         'store_hash' => '',
         'client_id' => '',
         'access_token' => '',
+        'output_mode' => 'clean',
         'order_id' => '',
       }
     end
@@ -94,6 +103,10 @@ module Agents
 
         unless options['order_id'].present?
           errors.add(:base, 'order_id is a required field')
+        end
+
+        if options['output_mode'].present? && !options['output_mode'].to_s.include?('{') && !%[clean merge].include?(options['output_mode'].to_s)
+          errors.add(:base, "if provided, output_mode must be 'clean' or 'merge'")
         end
     end
 
@@ -116,32 +129,33 @@ module Agents
     def handle(event)
       data = event.payload
       order_id = data['id']
+      new_event = interpolated['output_mode'].to_s == 'merge' ? data.dup : {}
 
       if (order_id.blank?)
-        create_event payload: {
+        create_event payload: new_event.merge(
           status: 500,
           message: "'#{order_id}' is not a valid order id",
-        }
+        )
       end
 
       begin
         order = @order_client.get(order_id)
         order[:customer] = @customer_client.get(order['customer_id'])
 
-        create_event payload: {
+        create_event payload: new_event.merge(
           order: order,
           status: 200,
-        }
+        )
 
       rescue BigcommerceApiError => e
         faraday_error = e.original_error
 
-        create_event payload: {
+        create_event payload: new_event.merge(
           status: faraday_error.response[:status],
           scope: e.scope,
           response: faraday_error.response[:body],
           request_data: e.data,
-        }
+        )
       end
 
     end
