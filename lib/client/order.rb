@@ -11,11 +11,13 @@ module BigcommerceOrderAgent
           order = response.body
         rescue Faraday::Error => e
           raise BigcommerceApiError.new(
-            500,
+            e.response[:status],
             'get order',
             "Failed to get order #{id}",
             id,
-            { order_id: id },
+            {
+              errors: JSON.parse(e.response[:body])['errors']
+            },
             e
           )
         end
@@ -42,11 +44,13 @@ module BigcommerceOrderAgent
           return response.body
         rescue Faraday::Error => e
           raise BigcommerceApiError.new(
-            500,
+            e.response[:status],
             'get order products',
             "Failed to get order products #{order_id}",
             order_id,
-            { order_id: order_id },
+            {
+              errors: JSON.parse(e.response[:body])['errors']
+            },
             e
           )
         end
@@ -59,11 +63,13 @@ module BigcommerceOrderAgent
           return response.body
         rescue Faraday::Error => e
           raise BigcommerceApiError.new(
-            500,
+            e.response[:status],
             'get order shipping address',
             "Failed to get order shipping address #{order_id}",
             order_id,
-            { order_id: order_id },
+            {
+              errors: JSON.parse(e.response[:body])['errors']
+            },
             e
           )
         end
@@ -76,11 +82,13 @@ module BigcommerceOrderAgent
           return response.body
         rescue Faraday::Error => e
           raise BigcommerceApiError.new(
-            500,
+            e.response[:status],
             'get order shipments',
             "Failed to get order shipments #{order_id}",
             order_id,
-            { order_id: order_id },
+            {
+              errors: JSON.parse(e.response[:body])['errors']
+            },
             e
           )
         end
@@ -93,11 +101,13 @@ module BigcommerceOrderAgent
           return response.body
         rescue Faraday::Error => e
           raise BigcommerceApiError.new(
-            500,
+            e.response[:status],
             'get order coupons',
             "Failed to get order coupons #{order_id}",
             order_id,
-            { order_id: order_id },
+            {
+              errors: JSON.parse(e.response[:body])['errors']
+            },
             e
           )
         end
@@ -110,11 +120,13 @@ module BigcommerceOrderAgent
           return response.body['data']
         rescue Faraday::Error => e
           raise BigcommerceApiError.new(
-            500,
+            e.response[:status],
             'get order transactions',
             "Failed to get order transactions #{order_id}",
             order_id,
-            { order_id: order_id },
+            {
+              errors: JSON.parse(e.response[:body])['errors']
+            },
             e
           )
         end

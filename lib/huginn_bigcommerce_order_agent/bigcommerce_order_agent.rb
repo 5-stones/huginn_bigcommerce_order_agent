@@ -148,14 +148,16 @@ module Agents
         )
 
       rescue BigcommerceApiError => e
-        faraday_error = e.original_error
-
-        create_event payload: new_event.merge(
-          status: faraday_error.response[:status],
-          scope: e.scope,
-          response: faraday_error.response[:body],
-          request_data: e.data,
-        )
+        emit_error(e)
+      rescue => e
+        emit_error(BigcommerceApiError.new(
+          500,
+          'get order by id',
+          e.message,
+          order_id,
+          { order_id: order_id },
+          e
+        ))
       end
 
     end
@@ -176,5 +178,22 @@ module Agents
         )
     end
 
+    #  Takes a BigCommerceProductError and emits the underlying data as an error payload
+    #  to assist with error reporting. It is recommended that these errors be consolidated
+    #  with a Digest Agent and reported as a summary.
+    def emit_error(error)
+      payload = {
+        status: error.status,
+        message: error.message,
+        scope: error.scope,
+        identifier: error.identifier,
+        data: error.data,
+      }
+      Rails.logger.debug({
+        error: payload,
+        trace: error.backtrace
+      })
+      create_event({ payload: payload })
+    end
   end
 end
