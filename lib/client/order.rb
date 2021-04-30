@@ -10,7 +10,14 @@ module BigcommerceOrderAgent
           response = client.get(uri({ order_id: id }), params)
           order = response.body
         rescue Faraday::Error => e
-          raise BigcommerceApiError.new('get order', { order_id: id }, e)
+          raise BigcommerceApiError.new(
+            500,
+            'get order',
+            "Failed to get order #{id}",
+            id,
+            { order_id: id },
+            e
+          )
         end
 
         if order.present?
@@ -34,7 +41,14 @@ module BigcommerceOrderAgent
           response = client.get(uri({ order_id: order_id }, 'products'), params)
           return response.body
         rescue Faraday::Error => e
-          raise BigcommerceApiError.new('get order products', { order_id: order_id }, e)
+          raise BigcommerceApiError.new(
+            500,
+            'get order products',
+            "Failed to get order products #{order_id}",
+            order_id,
+            { order_id: order_id },
+            e
+          )
         end
       end
 
@@ -44,7 +58,14 @@ module BigcommerceOrderAgent
           response = client.get(uri({ order_id: order_id }, 'shipping_addresses'), params)
           return response.body
         rescue Faraday::Error => e
-          raise BigcommerceApiError.new('get order shipping address', { order_id: order_id }, e)
+          raise BigcommerceApiError.new(
+            500,
+            'get order shipping address',
+            "Failed to get order shipping address #{order_id}",
+            order_id,
+            { order_id: order_id },
+            e
+          )
         end
       end
 
@@ -54,7 +75,14 @@ module BigcommerceOrderAgent
           response = client.get(uri({ order_id: order_id }, 'shipments'), params)
           return response.body
         rescue Faraday::Error => e
-          raise BigcommerceApiError.new('get order shipments', { order_id: order_id }, e)
+          raise BigcommerceApiError.new(
+            500,
+            'get order shipments',
+            "Failed to get order shipments #{order_id}",
+            order_id,
+            { order_id: order_id },
+            e
+          )
         end
       end
 
@@ -64,7 +92,13 @@ module BigcommerceOrderAgent
           response = client.get(uri({ order_id: order_id }, 'coupons'), params)
           return response.body
         rescue Faraday::Error => e
-          raise BigcommerceApiError.new('get order coupons', { order_id: order_id }, e
+          raise BigcommerceApiError.new(
+            500,
+            'get order coupons',
+            "Failed to get order coupons #{order_id}",
+            order_id,
+            { order_id: order_id },
+            e
           )
         end
       end
@@ -75,7 +109,14 @@ module BigcommerceOrderAgent
           response = client.get(uri({ api_version: 'v3', order_id: order_id }, 'transactions'), params)
           return response.body['data']
         rescue Faraday::Error => e
-          raise BigcommerceApiError.new('get order transactions', { order_id: order_id }, e)
+          raise BigcommerceApiError.new(
+            500,
+            'get order transactions',
+            "Failed to get order transactions #{order_id}",
+            order_id,
+            { order_id: order_id },
+            e
+          )
         end
       end
     end
