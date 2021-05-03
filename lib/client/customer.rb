@@ -12,7 +12,14 @@ module BigcommerceOrderAgent
           return response.body['data'][0]
         rescue Faraday::Error::ClientError => e
           raise BigcommerceApiError.new(
-            'get order', "Failed to get order #{id}", { order_id: id }, e
+            e.response[:status],
+            'get order customer',
+            "Failed to get order customer #{id}",
+            id,
+            {
+              errors: JSON.parse(e.response[:body])['errors']
+            },
+            e
           )
         end
       end
