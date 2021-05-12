@@ -13,17 +13,22 @@ It's up to the end user to decide what to do next.
 
 This gem is run as part of the [Huginn](https://github.com/huginn/huginn) project. If you haven't already, follow the [Getting Started](https://github.com/huginn/huginn#getting-started) instructions there.
 
-Add this string to your Huginn's .env `ADDITIONAL_GEMS` configuration:
+Add this string to your Huginn's .env `ADDITIONAL_GEMS` configuration: `carmen,huginn_bigcommerce_product_agent`
 
 ```ruby
-huginn_bigcommerce_product_agent
 # when only using this agent gem it should look like this:
-ADDITIONAL_GEMS=huginn_bigcommerce_product_agent
+ADDITIONAL_GEMS=carmen,huginn_bigcommerce_order_agent
 ```
 
 And then execute:
 
-    $ bundle
+$ bundle
+
+**NOTE:** Using this gem also requires that you use the [Carmen]() gem (which can also be defined as an additional gem).
+Carmen provides utility methods for looking up region codes. By default, the BigCommerce API
+returns address objects with state _names_, but not _codes_ (`Illinois`, not `IL`).
+
+Some systems may require the state code, so we use Carmen to find it, and set the result as `address['state_code']`
 
 ## Development
 

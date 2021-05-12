@@ -1,6 +1,10 @@
+require 'carmen'
+
 module BigcommerceOrderAgent
   module Client
     class Order < AbstractClient
+      include Carmen
+
       @uri_base = ':api_version/orders/:order_id'
 
       def get(id, params = {})
@@ -28,6 +32,8 @@ module BigcommerceOrderAgent
           order[:shipping_addresses] = get_shipping_addresses(id)
           order[:transactions] = get_transactions(id)
           order[:shipments] = get_shipments(id)
+
+          order['billing_address']['state_code'] = get_region_code(order['billing_address'])
 
           transactions = get_transactions(id)
         end
@@ -60,7 +66,14 @@ module BigcommerceOrderAgent
       def get_shipping_addresses(order_id, params = {})
         begin
           response = client.get(uri({ order_id: order_id }, 'shipping_addresses'), params)
-          return response.body
+
+          addresses = response.body
+
+          addresses.each do |addr|
+            addr['state_code'] = get_region_code(addr)
+          end
+
+          return addresses
         rescue Faraday::Error => e
           raise BigcommerceApiError.new(
             e.response[:status],
@@ -130,6 +143,14 @@ module BigcommerceOrderAgent
             e
           )
         end
+      end
+
+      # Returns the region (state) code for the provided address
+      def get_region_code(address)
+        country = Country.named(address['country'])
+        state = country.subregions.named(address['state'])
+
+        return state.code
       end
     end
   end
