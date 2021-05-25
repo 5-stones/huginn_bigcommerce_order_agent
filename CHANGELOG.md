@@ -1,4 +1,13 @@
-# 1.0.0 (2021-03-24)
+# [1.1.0](https://github.com/5-stones/huginn_bigcommerce_order_agent/compare/v1.0.0...v1.1.0) (2021-05-25)
+
+
+### Bug Fixes
+
+* **client/order:** Add `state_code` to addresses ([66ad988](https://github.com/5-stones/huginn_bigcommerce_order_agent/commit/66ad988d50fcf54a327736f9cf4554d3d712b00e))
+
+
+
+# [1.0.0](https://github.com/5-stones/huginn_bigcommerce_order_agent/compare/b3237b7d2d17f5a12c85e3633d1da4690ae779ad...v1.0.0) (2021-03-24)
 
 
 ### Bug Fixes

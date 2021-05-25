@@ -4,7 +4,7 @@ $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 
 Gem::Specification.new do |spec|
   spec.name          = "huginn_bigcommerce_order_agent"
-  spec.version       = "1.0.0"
+  spec.version       = "1.1.0"
   spec.authors       = ["5 Stones"]
   spec.email         = ["it@weare5stones.com"]
 
