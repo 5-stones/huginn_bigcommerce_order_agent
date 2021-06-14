@@ -69,8 +69,10 @@ module BigcommerceOrderAgent
 
           addresses = response.body
 
-          addresses.each do |addr|
-            addr['state_code'] = get_region_code(addr)
+          if (addresses)
+            addresses.each do |addr|
+              addr['state_code'] = get_region_code(addr)
+            end
           end
 
           return addresses
