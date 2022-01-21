@@ -1,3 +1,12 @@
+## [1.2.1](https://github.com/5-stones/huginn_bigcommerce_order_agent/compare/v1.2.0...v1.2.1) (2022-01-21)
+
+
+### Bug Fixes
+
+* **client/order:** Fix an error with international addresses ([8ab4ac5](https://github.com/5-stones/huginn_bigcommerce_order_agent/commit/8ab4ac5eabd22e9220e91a1859249e278983a51b))
+
+
+
 # [1.2.0](https://github.com/5-stones/huginn_bigcommerce_order_agent/compare/v1.1.0...v1.2.0) (2021-08-17)
 
 
