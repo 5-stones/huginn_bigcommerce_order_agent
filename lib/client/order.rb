@@ -152,7 +152,9 @@ module BigcommerceOrderAgent
         country = Country.named(address['country'])
         state = country.subregions.named(address['state'])
 
-        return state.code
+        #  For cases where a matching state is not found, default to the `state`
+        #  value on the address. (This is not uncommon for international addresses)
+        return state.nil? ? address['state'] : state.code
       end
     end
   end
