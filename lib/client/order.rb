@@ -150,7 +150,7 @@ module BigcommerceOrderAgent
       # Returns the region (state) code for the provided address
       def get_region_code(address)
         country = Country.named(address['country'])
-        state = country.nil? nil : country.subregions.named(address['state'])
+        state = country.nil? ? nil : country.subregions.named(address['state'])
 
         #  For cases where a matching state is not found, default to the `state`
         #  value on the address. (This is not uncommon for international addresses)
