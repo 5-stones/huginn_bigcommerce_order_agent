@@ -1,3 +1,13 @@
+## [1.2.2](https://github.com/5-stones/huginn_bigcommerce_order_agent/compare/v1.2.1...v1.2.2) (2022-03-16)
+
+
+### Bug Fixes
+
+* **lib/client/order.rb:** Fix ternary operator in the region code lookup ([240f9ea](https://github.com/5-stones/huginn_bigcommerce_order_agent/commit/240f9eab41a0abbcb627bdfa624b3281a4edbf67))
+* **order.rb:** Fix an error in the adress mapping ([44c861a](https://github.com/5-stones/huginn_bigcommerce_order_agent/commit/44c861a13a7827eb36e5638618f2d0dc0e397816))
+
+
+
 ## [1.2.1](https://github.com/5-stones/huginn_bigcommerce_order_agent/compare/v1.2.0...v1.2.1) (2022-01-21)
 
 
