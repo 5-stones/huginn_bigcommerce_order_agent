@@ -43,11 +43,27 @@ module BigcommerceOrderAgent
 
       #----------  Sub Record Queries  ----------#
 
-      # Returns the order's line items
-      def get_products(order_id, params = {})
+      # Returns the order's line items.
+      # NOTE: BigCommerce silently paginates this resource. The dfault is 50 items per page,
+      # but orders with more than 50 items won't return anything to indicate that there are
+      # more items to fetch, so we effectively have to call this recursively until the API
+      # returns an empty array. Super fun.
+      def get_products(order_id, page_number = 1, page_size = 50)
         begin
-          response = client.get(uri({ order_id: order_id }, 'products'), params)
-          return response.body
+          response = client.get(uri({ order_id: order_id }, 'products'), { limit: page_size, page: page_number })
+          data = response.body
+
+          if (data.present? && data.length == page_size)
+            # If the number of items is the same as the max page size, check for another page
+            next_page = get_products(order_id, page_number + 1, page_size)
+            # If there are items on the next page, merge them into the current list
+            if (next_page.present? && next_page.length > 0)
+              data.concat(next_page)
+            end
+          end
+
+          # return the full list of items for the order
+          return data
         rescue Faraday::Error => e
           raise BigcommerceApiError.new(
             e.response[:status],
@@ -55,7 +71,9 @@ module BigcommerceOrderAgent
             "Failed to get order products #{order_id}",
             order_id,
             {
-              errors: JSON.parse(e.response[:body])['errors']
+              errors: JSON.parse(e.response[:body])['errors'],
+              product_page_number: page_number,
+              page_size: page_size
             },
             e
           )
