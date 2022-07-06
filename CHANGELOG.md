@@ -1,3 +1,12 @@
+## [1.2.3](https://github.com/5-stones/huginn_bigcommerce_order_agent/compare/v1.2.2...v1.2.3) (2022-07-06)
+
+
+### Bug Fixes
+
+* **lib/client/order.rb:** Fix order line item payload ([5f717c4](https://github.com/5-stones/huginn_bigcommerce_order_agent/commit/5f717c48abce8f3b007bcbf0cc23fd2407f79cfa))
+
+
+
 ## [1.2.2](https://github.com/5-stones/huginn_bigcommerce_order_agent/compare/v1.2.1...v1.2.2) (2022-03-16)
 
 
